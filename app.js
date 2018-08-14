@@ -5,11 +5,22 @@
 
 var express = require('express')
   , routes = require('./routes')
+  , fs = require('fs')
   , http = require('http')
   , path = require('path');
 
 var app = express();
 
+function tries(fn){
+  return function(str){
+    var promise = new Promise()
+    return promise.call(fn,str)
+    
+  }
+}
+tries(fs)('view/index.ejs').then(function(){
+  console.log('has router');
+});
 // all environments
 app.set('port', process.env.PORT || 3000);
 app.set('views', __dirname + '/views');

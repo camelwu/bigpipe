@@ -5,12 +5,22 @@
 <link rel='stylesheet' href='/stylesheets/style.css' />
 <script src="/js/jquery.min.js"></script>
 <script src="/js/angular.min.js"></script>
-
+<style>
+#gh {
+	width: 300px;
+	height: 30px;
+	line-height: 30px;
+	border: 1px solid #000;
+	margin: 0 auto;
+	padding: 0 auto;
+	text-align: center;
+}
+</style>
 </head>
 <body ng-controller="TextController">
 <p>{{someText}}</p>
 
-
+<div id="gh">test,my Event</div>
 <script src="/js/underscore.js"></script>
 <script src="/js/bigpipe.js"></script>
 <script src="/js/test.js"></script>
@@ -25,14 +35,42 @@ function TextController($scope){
 }
 
 angular.bootstrap(document.documentElement);
+function fs(str){
+	var p = new Promise(function(resolve, reject){
+    	console.log('begin promise');
+        
+        setTimeout(function(){
+            console.log('done'+str);
+            resolve('what ever');
+        }, 2000)
+    })
+    return p
+}
+function tries(fn){
+  return function(str){
+    console.log('start='+str)
+	return fn(str)
+  }
+}
+tries(fs)('view/index.ejs').then(function(data){
+	console.log(data+'over')
+})
 </script>
 
 <script>
+var event = new Event('build',{
+            bubbles: 'true',
+            cancelable: 'true'
+        }),elem = document.getElementById("gh");
+// 订阅者订阅事件.
+elem.addEventListener('build', function (e) {
+	console.log(e);
+	console.log(e.bubbles);
+    console.log(e.cancelable);
+}, false);
 
-</script>
-
-<script>
-
+// 发布事件.
+elem.dispatchEvent(event);
 </script>
 </body>
 </html>
